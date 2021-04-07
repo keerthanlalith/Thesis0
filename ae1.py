@@ -82,10 +82,10 @@ with tf.Session() as sess:
     for i in range(1, num_steps+1):
         # Prepare Data
         # Get the next batch of data (only state, diff/next state)
-        batch_x, batch_d = next_batch(batch_size,s,d)
+        batch_x, batch_ns = next_batch(batch_size,s,ns)
 
         # Run optimization op (backprop) and cost op (to get loss value)
-        _, l = sess.run([optimizer, loss], feed_dict={X: batch_x,X_d: batch_d})
+        _, l = sess.run([optimizer, loss], feed_dict={X: batch_x,X_d: batch_ns})
         # Display logs per step
         if i % display_step == 0 or i == 1:
             print('Step %i: Minibatch Loss: %f' % (i, l))
@@ -100,43 +100,43 @@ with tf.Session() as sess:
     
     # Normalise the input 
     test_ms = copy.deepcopy(test_s)    
-    test_md = copy.deepcopy(test_d)
+    test_mns = copy.deepcopy(test_ns)
 
-    test_ms, test_md = normalise_data(test_ms,test_md)
+    test_ms, test_mns = normalise_data(test_ms,test_mns)
     n=len(test_s)
     
     n = 10 
 
     
     # Encode the current state and decode the next state
-    pred_d = sess.run(decoder_op, feed_dict={X: test_ms})
-    pred_md = copy.deepcopy(pred_d)
+    pred_ns = sess.run(decoder_op, feed_dict={X: test_ms})
+    pred_mns = copy.deepcopy(pred_ns)
 
-    print ("AE diff output, Normalised Test diff,  Difference")
-    d_err = np.abs(test_md - pred_d)
+    print ("AE pred next state, True Next state,  Difference")
+    d_err = np.abs(test_mns - pred_ns)
     
     for i in range(n):
         for j in range(4):
-            pred_d[i][j]=float("{:5.6f}".format(pred_d[i][j]))
-            test_md[i][j]=float("{:5.6f}".format(test_md[i][j]))
+            pred_ns[i][j]=float("{:5.6f}".format(pred_ns[i][j]))
+            test_mns[i][j]=float("{:5.6f}".format(test_mns[i][j]))
             d_err[i][j]=float("{:5.6f}".format(d_err[i][j]))
 
     for i in range(n):
-        print(pred_d[i],test_md[i],d_err[i])
+        print(pred_ns[i],test_mns[i],d_err[i])
     print("------")
     
     # Denormalise the data
-    pred_md = denormalise (pred_md)
-    d_err_1 = np.abs(test_d - pred_md)
+    pred_mns = denormalise (pred_mns)
+    d_err_1 = np.abs(test_ns - pred_mns)
 
     for i in range(n):
         for j in range(4):
-            pred_md[i][j]=float("{:5.6f}".format(pred_md[i][j]))
-            test_d[i][j]=float("{:5.6f}".format(test_d[i][j]))
+            pred_mns[i][j]=float("{:5.6f}".format(pred_mns[i][j]))
+            test_ns[i][j]=float("{:5.6f}".format(test_ns[i][j]))
             d_err_1[i][j]=float("{:5.6f}".format(d_err_1[i][j]))
 
     for i in range(n):
-        print(pred_md[i],test_d[i],d_err_1[i])
+        print(pred_mns[i],test_ns[i],d_err_1[i])
     print("------")
 
     p_err =np.mean(d_err*d_err,axis=0)
