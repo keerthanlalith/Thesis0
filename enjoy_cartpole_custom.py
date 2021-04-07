@@ -183,19 +183,6 @@ def main():
         filename = 'Data/Diff.npy'
         pickle.dump(d,open(filename,'wb'))
 
-    '''
-    # load state, action, nstate
-    filename = 'TNState.npy'
-    nstate = pickle.load(open(filename, 'rb'))
-    filename = 'TAction.npy'
-    action = pickle.load(open(filename, 'rb'))
-    filename = 'TState.npy'
-    state = pickle.load(open(filename, 'rb'))
-    filename = 'TDiff.npy'
-    diff = pickle.load(open(filename, 'rb'))
-    '''
-
-
 
 if __name__ == '__main__':
     main()
