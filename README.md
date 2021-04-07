@@ -16,7 +16,7 @@ pip install -e .
 ``` 
 
 ## Collecting expert data 
-[OpenAI Baselines](https://github.com/openai/baselines) i obtain these trajectories. 
+[OpenAI Baselines](https://github.com/openai/baselines) is used to obtain expert trajectories. 
 Collecting the data consists of two steps: 
 1) training the expert and 
 2) running the learned policy and saving the observed state trajectories to disk.
