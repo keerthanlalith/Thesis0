@@ -8,10 +8,20 @@ import copy
 from AE import autoencoder2 as autoencoder
 from AE import *
 
+def next_batch(n, data, labels):
+
+    idx=np.random.choice(len(data), size=n, replace=False)
+    data_shuffle = data[idx] 
+    labels_shuffle =labels[idx]
+
+    return data_shuffle, labels_shuffle
+
 # Training Parameters
 learning_rate = lr
 num_steps = steps
 batch_size = batch
+display_step = 1000
+examples_to_show = 10
 
 # Import data
 try:
@@ -42,20 +52,6 @@ except:
 print("Normalised Data")
 s,ns = normalise_data(s,ns)
 
-
-
-def next_batch(n, data, labels):
-
-    idx=np.random.choice(len(data), size=n, replace=False)
-    data_shuffle = data[idx] 
-    labels_shuffle =labels[idx]
-
-    return data_shuffle, labels_shuffle
-
-display_step = 1000
-examples_to_show = 10
-
-
 # tf Graph input (only pictures)
 X = tf.placeholder("float", [None, 4])
 X_d = tf.placeholder("float", [None, 4])
@@ -85,11 +81,11 @@ with tf.Session() as sess:
     # Training
     for i in range(1, num_steps+1):
         # Prepare Data
-        # Get the next batch of MNIST data (only images are needed, not labels)
-        batch_x, batch_ns = next_batch(batch_size,s,ns)
+        # Get the next batch of data (only state, diff/next state)
+        batch_x, batch_d = next_batch(batch_size,s,d)
 
         # Run optimization op (backprop) and cost op (to get loss value)
-        _, l = sess.run([optimizer, loss], feed_dict={X: batch_x,X_d: batch_ns})
+        _, l = sess.run([optimizer, loss], feed_dict={X: batch_x,X_d: batch_d})
         # Display logs per step
         if i % display_step == 0 or i == 1:
             print('Step %i: Minibatch Loss: %f' % (i, l))
@@ -97,45 +93,50 @@ with tf.Session() as sess:
     pause=0
     while pause==1:
         pause=1
+
+
     # Testing
-    # Encode and decode images from test set and visualize their reconstruction.
+    # Encode and decode states from test set and find their next state.
     
     # Normalise the input 
     test_ms = copy.deepcopy(test_s)    
-    test_mns = copy.deepcopy(test_ns)
-    test_ms, test_mns = normalise_data(test_ms,test_mns)
+    test_md = copy.deepcopy(test_d)
+
+    test_ms, test_md = normalise_data(test_ms,test_md)
     n=len(test_s)
     
-    # Encode the current state and decode the next state
-    pred_ns = sess.run(decoder_op, feed_dict={X: test_ms})
-    pred_mns = copy.deepcopy(pred_ns)
+    n = 10 
 
-    #print(type(test_mns),type(pred_ns))
+    
+    # Encode the current state and decode the next state
+    pred_d = sess.run(decoder_op, feed_dict={X: test_ms})
+    pred_md = copy.deepcopy(pred_d)
+
     print ("AE diff output, Normalised Test diff,  Difference")
-    d_err = np.abs(test_mns - pred_ns)
+    d_err = np.abs(test_md - pred_d)
     
     for i in range(n):
         for j in range(4):
-            pred_ns[i][j]=float("{:5.6f}".format(pred_ns[i][j]))
-            test_mns[i][j]=float("{:5.6f}".format(test_mns[i][j]))
+            pred_d[i][j]=float("{:5.6f}".format(pred_d[i][j]))
+            test_md[i][j]=float("{:5.6f}".format(test_md[i][j]))
             d_err[i][j]=float("{:5.6f}".format(d_err[i][j]))
 
     for i in range(n):
-        print(pred_ns[i],test_mns[i],d_err[i])
+        print(pred_d[i],test_md[i],d_err[i])
     print("------")
     
     # Denormalise the data
-    pred_mns = denormalise (pred_mns)
-    d_err_1 = np.abs(test_ns - pred_mns)
+    pred_md = denormalise (pred_md)
+    d_err_1 = np.abs(test_d - pred_md)
 
     for i in range(n):
         for j in range(4):
-            pred_mns[i][j]=float("{:5.6f}".format(pred_mns[i][j]))
-            test_ns[i][j]=float("{:5.6f}".format(test_ns[i][j]))
+            pred_md[i][j]=float("{:5.6f}".format(pred_md[i][j]))
+            test_d[i][j]=float("{:5.6f}".format(test_d[i][j]))
             d_err_1[i][j]=float("{:5.6f}".format(d_err_1[i][j]))
 
     for i in range(n):
-        print(pred_mns[i],test_ns[i],d_err_1[i])
+        print(pred_md[i],test_d[i],d_err_1[i])
     print("------")
 
     p_err =np.mean(d_err*d_err,axis=0)

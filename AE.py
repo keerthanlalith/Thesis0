@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 # Training Parameters
-lr = 0.00015
+lr = 0.00005
 steps = 50000
 batch = 64
 
@@ -13,217 +13,221 @@ def denormalise (ns):
 
     return ns
 
-# Network Parameters
-num_input = 4 # MNIST data input (img shape: 28*28)
-
-num_hidden_1 = 16 # 1st layer num features
-num_hidden_2 = 16 # 2nd layer num features
-num_latent = 4 # latent layer num features (the latent dim)
-
 def autoencoder1(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 8)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.tanh)    
-    
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent, activation=tf.nn.tanh)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 8)
+    encode = tf.nn.leaky_relu(encode, 0.2)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 8)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.tanh)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 8)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input, activation=tf.nn.tanh)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder2(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 8)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.tanh)    
-    
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent, activation=tf.nn.tanh)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 16)
+    encode = tf.nn.leaky_relu(encode, 0.2)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 16)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.tanh)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 8)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder3(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 16)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.tanh)    
-    
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.tanh)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 16)
+    encode = tf.nn.leaky_relu(encode, 0.2)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 16)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.tanh)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 16)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder4(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 8)
     encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 32)
     encode = tf.nn.leaky_relu(encode, 0.2)
     
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent)
-    latent = tf.nn.leaky_relu(latent, 0.2)
-
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
     
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 32)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 8)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
-    #recon = tf.nn.leaky_relu(recon, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
 
-    return latent
+    return recon
 
 def autoencoder5(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 16)
     encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 32)
     encode = tf.nn.leaky_relu(encode, 0.2)
     
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent)
-    latent = tf.nn.leaky_relu(latent, 0.2)
-
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
     
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 32)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 16)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder6(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 32)
     encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 32)
     encode = tf.nn.leaky_relu(encode, 0.2)
-    encode = tf.layers.dense(encode, num_hidden_2)
-    encode = tf.nn.leaky_relu(encode, 0.2)
-    
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
         
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 32)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1)
-    #decode = tf.nn.leaky_relu(decode, 0.2)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 32)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder7(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 64)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.sigmoid)    
-    
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent, activation=tf.nn.sigmoid)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 64)
+    encode = tf.nn.leaky_relu(encode, 0.2)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 64)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.sigmoid)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 64)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input, activation=tf.nn.sigmoid)
+    # Decoder Hidden layer with leaky_relu activation #3
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder8(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 128)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.sigmoid)    
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 128)
+    encode = tf.nn.leaky_relu(encode, 0.2)
     
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent, activation=tf.nn.sigmoid)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 128)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.sigmoid)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 128)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
 
 def autoencoder9(input_l):
-    # Encoder Hidden layer with sigmoid activation #1
-    encode = tf.layers.dense(input_l, num_hidden_1,activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #1
+    encode = tf.layers.dense(input_l, 128)
+    encode = tf.nn.leaky_relu(encode, 0.2)
 
-    # Encoder Hidden layer with sigmoid activation #2
-    encode = tf.layers.dense(encode, num_hidden_2, activation=tf.nn.sigmoid)    
+    # Encoder Hidden layer with leaky_relu activation #2
+    encode = tf.layers.dense(encode, 256)
+    encode = tf.nn.leaky_relu(encode, 0.2)
     
-    # Encoder Hidden layer with sigmoid activation #3
-    latent = tf.layers.dense(encode, num_latent)
-    
-    # Decoder Hidden layer with sigmoid activation #1
-    #decode = tf.layers.dense(latent, num_hidden_2 , activation=tf.nn.sigmoid)
+    # Encoder Hidden layer with leaky_relu activation #3
+    latent = tf.layers.dense(encode, 8)
+        
+    # Decoder Hidden layer with leaky_relu activation #1
+    decode = tf.layers.dense(latent, 256)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #2
-    #decode = tf.layers.dense(decode, num_hidden_1, activation=tf.nn.sigmoid)
+    # Decoder Hidden layer with leaky_relu activation #2
+    decode = tf.layers.dense(decode, 128)
+    decode = tf.nn.leaky_relu(decode, 0.2)
 
-    # Decoder Hidden layer with sigmoid activation #3
-    #recon = tf.layers.dense(decode, num_input)
+    # Decoder Hidden layer
+    recon = tf.layers.dense(decode, 4)
     
-    return latent
+    return recon
