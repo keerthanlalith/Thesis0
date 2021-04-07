@@ -6,10 +6,13 @@ This implementation has been tested with Python 3.5 on Ubuntu 18.04.
 ```Shell
 # 1) Clone repository 
 git clone https://https://github.com/keerthanlalith/Thesis0
+git clone https://github.com/openai/baselines.git
 cd Thesis0
 
 # 2) Install requirements
 pip install -r requirements.txt
+cd baselines
+pip install -e .
 ``` 
 
 ## Collecting expert data 
