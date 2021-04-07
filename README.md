@@ -27,6 +27,8 @@ python train_expert/train_cartpole.py
 
 # 2) Collect state trajectories 
 python enjoy_cartpole_custom.py
+# 50000 steps are collected for training data
+# 1000 steps are collected for test data
 ```
 
 Once done running, the expert policy from step 1 is written to [Data/cartpole.pkl](https://github.com/keerthanlalith/Thesis0/tree/main/Data/). Then, step 2 loads and runs the policy and saves the observed states, actions, next states  and difference(between the current state and the nextstate) to [Data](https://github.com/keerthanlalith/Thesis0/tree/main/Data). 
@@ -36,8 +38,11 @@ Once done running, the expert policy from step 1 is written to [Data/cartpole.pk
 
 Given the current state, the autoencoder is used to predict the difference beteween the current state and the next state
 The autoencoder is tained in a spervised learning manner. The current state and diff for training taken from State.npy, Diff.npy [Data](https://github.com/keerthanlalith/Thesis0/tree/main/Data). The autoendoer is tested on test data taken from TState.npy, TDiff.npy
+The Autoencoder stucture is defined in the AE.py, with different activation fucntions
 
-to train the autoencoder, run
+Each auto encoder is trained for 50000 iterations, with batch size of 64, learning rate = 0.00005
+
+to train an autoencoder, run
 
 ```Shell
 python ae1.py
@@ -47,7 +52,7 @@ python ae2.py
 #utilises the autoencoder2 stucture defiend in AE.py
 ```
 
-The Autoencoder prints predicted diff, true Test diff,  Difference(abs difference predicted and true)
+The Autoencoder prints predicted diff, true Test diff,  Difference(abs difference between predicted and true)
 ```Shell
 AE diff output, Normalised Test diff,  Difference
 [-0.003946  0.270008 -0.004468 -0.343998] [-4.43000e-04  1.94754e-01  9.00000e-05 -2.84683e-01] [0.003503 0.075253 0.004557 0.059315]
@@ -81,3 +86,6 @@ to train all autoencoder structures, run
 ```Shell
 ./testall.sh
 ```
+
+The resluts of the script are in [Results](https://github.com/keerthanlalith/Thesis0/tree/main/Results), data1.txt,data2.txt ...respectively
+the mean square error state vise for all auto encoder stuctures are on present in [Dataall.txt](https://github.com/keerthanlalith/Thesis0/blob/main/Dataall.txt)
