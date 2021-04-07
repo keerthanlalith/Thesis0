@@ -36,13 +36,13 @@ Once done running, the expert policy from step 1 is written to [Data/cartpole.pk
 
 ## Training Next state predictor/ autoencoder
 
-Given the current state, the autoencoder is used to predict the difference beteween the current state and the next state
-The autoencoder is tained in a spervised learning manner. The current state and diff for training taken from State.npy, Diff.npy [Data](https://github.com/keerthanlalith/Thesis0/tree/main/Data). The autoendoer is tested on test data taken from TState.npy, TDiff.npy
-The Autoencoder stucture is defined in the AE.py, with different activation fucntions
+Given the current state, the 2 layer NN is used to predict the difference beteween the current state and the next state
+The NN is tained in a spervised learning manner. The current state and diff for training taken from State.npy, Diff.npy [Data](https://github.com/keerthanlalith/Thesis0/tree/main/Data). The autoendoer is tested on test data taken from TState.npy, TDiff.npy
+The NN stucture is defined in the AE.py, with leakyRELU activation fucntion
 
-Each auto encoder is trained for 50000 iterations, with batch size of 64, learning rate = 0.00005
+Each NN is trained for 50000 iterations, with batch size of 64, learning rate = 0.00005
 
-to train an autoencoder, run
+to train the NN, run
 
 ```Shell
 python ae1.py
@@ -52,7 +52,7 @@ python ae2.py
 #utilises the autoencoder2 stucture defiend in AE.py
 ```
 
-The Autoencoder prints predicted diff, true Test diff,  Difference(abs difference between predicted and true)
+The NN prints predicted diff, true Test diff,  Difference(abs difference between predicted and true)
 ```Shell
 AE diff output, Normalised Test diff,  Difference
 [-0.003946  0.270008 -0.004468 -0.343998] [-4.43000e-04  1.94754e-01  9.00000e-05 -2.84683e-01] [0.003503 0.075253 0.004557 0.059315]
@@ -81,7 +81,7 @@ AE diff output, Normalised Test diff,  Difference
 ```
 lastly it prints the mean square error state vise on the test data
 
-to train all autoencoder structures, run
+to train all NN structures, run
 
 ```Shell
 ./testall.sh
