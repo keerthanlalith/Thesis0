@@ -38,7 +38,7 @@ Once done running, the expert policy from step 1 is written to [Data/cartpole.pk
 
 Given the current state, the autoencoder is used to predict the difference beteween the current state and the next state
 The autoencoder is tained in a spervised learning manner. The current state and diff for training taken from State.npy, Diff.npy [Data](https://github.com/keerthanlalith/Thesis0/tree/main/Data). The autoendoer is tested on test data taken from TState.npy, TDiff.npy
-The Autoencoder stucture is defined in the AE.py, with different activation fucntions
+The Autoencoder stucture is defined in the AE.py, with leakyRELU activation fucntions
 
 Each auto encoder is trained for 50000 iterations, with batch size of 64, learning rate = 0.00005
 
